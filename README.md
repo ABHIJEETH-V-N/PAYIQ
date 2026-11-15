@@ -1,10 +1,5 @@
-# Teams Module: Build Prompt
+# PayIQ
 
-`teams-module-prompt.md` extends the main build prompt with a **Teams** space. In it, users create and manage AI teammates. Each teammate is a separate, permissioned agent that works under RBI-aligned controls.
-
-> **Status:** design baseline for a prototype. Real money movement is out of scope, and all transactions stay simulated.
-
----
 
 ## What this module covers
 
