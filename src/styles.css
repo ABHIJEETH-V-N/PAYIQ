@@ -1,0 +1,158 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 14px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-sky: var(--sky);
+  --color-sky-soft: var(--sky-soft);
+  --color-navy: var(--navy);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Paytm navy + sky blue on a Luma-style soft canvas */
+:root {
+  --radius: 1rem;
+  --navy: oklch(0.29 0.11 258);
+  --sky: oklch(0.73 0.14 228);
+  --sky-soft: oklch(0.95 0.035 228);
+  --background: oklch(0.985 0.004 240);
+  --foreground: oklch(0.22 0.06 258);
+  --card: oklch(1 0 0 / 0.78);
+  --card-foreground: oklch(0.22 0.06 258);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.06 258);
+  --primary: var(--navy);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.955 0.01 245);
+  --secondary-foreground: oklch(0.29 0.11 258);
+  --muted: oklch(0.96 0.008 245);
+  --muted-foreground: oklch(0.52 0.03 255);
+  --accent: var(--sky-soft);
+  --accent-foreground: oklch(0.36 0.12 245);
+  --destructive: oklch(0.6 0.21 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.64 0.15 155);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.76 0.15 70);
+  --warning-foreground: oklch(0.25 0.05 60);
+  --border: oklch(0.92 0.012 245);
+  --input: oklch(0.91 0.012 245);
+  --ring: var(--sky);
+  --chart-1: var(--sky);
+  --chart-2: var(--navy);
+  --chart-3: oklch(0.64 0.15 155);
+  --chart-4: oklch(0.76 0.15 70);
+  --chart-5: oklch(0.6 0.21 25);
+  --sidebar: oklch(1 0 0 / 0.7);
+  --sidebar-foreground: oklch(0.22 0.06 258);
+  --sidebar-primary: var(--navy);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: var(--sky-soft);
+  --sidebar-accent-foreground: oklch(0.29 0.11 258);
+  --sidebar-border: oklch(0.92 0.012 245);
+  --sidebar-ring: var(--sky);
+
+  --gradient-brand: linear-gradient(135deg, var(--navy) 0%, oklch(0.45 0.14 245) 55%, var(--sky) 100%);
+  --gradient-glow:
+    radial-gradient(60rem 30rem at 10% -10%, oklch(0.9 0.07 228 / 0.55), transparent 60%),
+    radial-gradient(40rem 25rem at 100% 0%, oklch(0.9 0.06 270 / 0.35), transparent 60%),
+    radial-gradient(40rem 30rem at 50% 110%, oklch(0.93 0.05 200 / 0.4), transparent 60%);
+  --shadow-soft: 0 1px 2px oklch(0.29 0.11 258 / 0.04), 0 8px 30px -12px oklch(0.29 0.11 258 / 0.14);
+  --shadow-brand: 0 12px 30px -10px oklch(0.45 0.14 245 / 0.5);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { -webkit-tap-highlight-color: transparent; }
+  body {
+    background-color: var(--color-background);
+    background-image: var(--gradient-glow);
+    background-attachment: fixed;
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
+}
+
+@utility glass {
+  background: var(--card);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid oklch(1 0 0 / 0.7);
+  box-shadow: var(--shadow-soft);
+}
+@utility bg-brand { background-image: var(--gradient-brand); }
+@utility shadow-brand { box-shadow: var(--shadow-brand); }
+@utility shadow-soft { box-shadow: var(--shadow-soft); }
+@utility text-gradient {
+  background-image: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pulse-dot { 0%,100% { box-shadow: 0 0 0 0 oklch(0.73 0.14 228 / 0.6); } 50% { box-shadow: 0 0 0 6px oklch(0.73 0.14 228 / 0); } }
+@utility animate-rise { animation: rise 0.45s cubic-bezier(.2,.7,.2,1) both; }
+@utility animate-pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+@media print {
+  @page { size: A4; margin: 12mm; }
+  body:has(.receipt-print) * { visibility: hidden; }
+  body:has(.receipt-print) .receipt-print,
+  body:has(.receipt-print) .receipt-print * { visibility: visible; }
+  .receipt-print { position: absolute; inset: 0 auto auto 0; width: 100%; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .receipt-print tr, .receipt-print header { break-inside: avoid; }
+  .receipt-print table { min-width: 0; }
+}

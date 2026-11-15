@@ -1,0 +1,15 @@
+CREATE SCHEMA IF NOT EXISTS payiq_private; REVOKE ALL ON SCHEMA payiq_private FROM PUBLIC,anon; GRANT USAGE ON SCHEMA payiq_private TO authenticated;
+ALTER FUNCTION public.configure_simulation_wallet(text,text,boolean) SET SCHEMA payiq_private;
+ALTER FUNCTION public.top_up_simulation_wallet(numeric) SET SCHEMA payiq_private;
+ALTER FUNCTION public.search_simulation_recipient(text) SET SCHEMA payiq_private;
+ALTER FUNCTION public.prepare_simulation_transfer(uuid,numeric,uuid) SET SCHEMA payiq_private;
+ALTER FUNCTION public.confirm_simulation_transfer(uuid) SET SCHEMA payiq_private;
+ALTER FUNCTION public.cancel_simulation_transfer(uuid) SET SCHEMA payiq_private;
+CREATE FUNCTION public.configure_simulation_wallet(p_phone text,p_upi text,p_discoverable boolean) RETURNS void LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$ SELECT payiq_private.configure_simulation_wallet(p_phone,p_upi,p_discoverable) $$;
+CREATE FUNCTION public.top_up_simulation_wallet(p_amount numeric) RETURNS numeric LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$ SELECT payiq_private.top_up_simulation_wallet(p_amount) $$;
+CREATE FUNCTION public.search_simulation_recipient(p_query text) RETURNS TABLE(user_id uuid,name text,alias text) LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$ SELECT * FROM payiq_private.search_simulation_recipient(p_query) $$;
+CREATE FUNCTION public.prepare_simulation_transfer(p_recipient uuid,p_amount numeric,p_sync uuid DEFAULT NULL) RETURNS uuid LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$ SELECT payiq_private.prepare_simulation_transfer(p_recipient,p_amount,p_sync) $$;
+CREATE FUNCTION public.confirm_simulation_transfer(p_id uuid) RETURNS uuid LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$ SELECT payiq_private.confirm_simulation_transfer(p_id) $$;
+CREATE FUNCTION public.cancel_simulation_transfer(p_id uuid) RETURNS void LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$ SELECT payiq_private.cancel_simulation_transfer(p_id) $$;
+REVOKE ALL ON FUNCTION public.configure_simulation_wallet(text,text,boolean),public.top_up_simulation_wallet(numeric),public.search_simulation_recipient(text),public.prepare_simulation_transfer(uuid,numeric,uuid),public.confirm_simulation_transfer(uuid),public.cancel_simulation_transfer(uuid) FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.configure_simulation_wallet(text,text,boolean),public.top_up_simulation_wallet(numeric),public.search_simulation_recipient(text),public.prepare_simulation_transfer(uuid,numeric,uuid),public.confirm_simulation_transfer(uuid),public.cancel_simulation_transfer(uuid) TO authenticated;

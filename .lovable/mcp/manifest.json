@@ -1,0 +1,452 @@
+{
+  "version": 1,
+  "sdk_version": "3.5.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://zdiysocsigtxzvxrgbfn.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "payiq-frontend",
+      "version": "0.1.0",
+      "title": "PayIQ-FrontEnd"
+    },
+    "tools": [
+      {
+        "name": "create_sync_request",
+        "title": "Create Smart Transfer draft",
+        "description": "Save a user-owned payout or collection draft with an existing policy; no money moves.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "counterparty": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "counterparty_email": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "email"
+                },
+                {
+                  "type": "string",
+                  "const": ""
+                }
+              ]
+            },
+            "sender_email": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "email"
+                },
+                {
+                  "type": "string",
+                  "const": ""
+                }
+              ],
+              "default": ""
+            },
+            "email_updates": {
+              "type": "boolean",
+              "default": true
+            },
+            "counterparty_address": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "DEBIT",
+                "CREDIT"
+              ]
+            },
+            "amount_type": {
+              "type": "string",
+              "enum": [
+                "FIXED",
+                "VARIABLE"
+              ]
+            },
+            "amount": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "max_cap": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "policy_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "name",
+            "counterparty",
+            "counterparty_email",
+            "counterparty_address",
+            "direction",
+            "amount_type",
+            "amount",
+            "max_cap",
+            "policy_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_wallet",
+        "title": "Get wallet",
+        "description": "Read your available balance and account aliases.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_policies",
+        "title": "List policies",
+        "description": "Read your governance policies.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "query_ledger",
+        "title": "Query ledger",
+        "description": "Search your recorded transactions before answering finance questions.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "party": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "from_party": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "to_party": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "ALL",
+                "SUCCESS",
+                "RETRYING",
+                "FAILED"
+              ]
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "DEBIT",
+                "CREDIT"
+              ]
+            },
+            "source_type": {
+              "type": "string",
+              "enum": [
+                "SYNC_REQUEST",
+                "DIRECT_PAYMENT",
+                "WALLET_TRANSFER"
+              ]
+            },
+            "from_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "to_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "min_amount": {
+              "type": "number",
+              "minimum": 0
+            },
+            "max_amount": {
+              "type": "number",
+              "minimum": 0
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_recipient",
+        "title": "Search wallet recipient",
+        "description": "Find a discoverable wallet recipient by exact account email, phone or UPI alias.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 150
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "prepare_transfer",
+        "title": "Prepare transfer",
+        "description": "Prepare a wallet transfer; only the payer can confirm in the wallet screen.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 150
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 100000
+            }
+          },
+          "required": [
+            "query",
+            "amount"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_policy",
+        "title": "Create policy",
+        "description": "Create a governance policy with bounded retry and refund settings.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "requires_user_auth": {
+              "type": "boolean"
+            },
+            "max_retries": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 2
+            },
+            "auto_email": {
+              "type": "boolean",
+              "default": true
+            },
+            "frequency": {
+              "type": "string",
+              "enum": [
+                "ONCE",
+                "DAILY",
+                "WEEKLY",
+                "MONTHLY"
+              ],
+              "default": "ONCE"
+            },
+            "execution_date": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "auto_approve_limit": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "retry_delay_seconds": {
+              "type": "number",
+              "enum": [
+                5,
+                900,
+                3600
+              ],
+              "default": 5
+            },
+            "auto_refund_limit": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100000,
+              "default": 0
+            }
+          },
+          "required": [
+            "name",
+            "requires_user_auth"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_knowledge_base",
+        "title": "Find documents",
+        "description": "Search your uploaded filenames, not unindexed document contents.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "generate_invoice",
+        "title": "Export transaction summary",
+        "description": "Generate a private PDF receipt or CSV summary, not a tax invoice.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "transaction_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "party": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "PDF",
+                "CSV"
+              ],
+              "default": "PDF"
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

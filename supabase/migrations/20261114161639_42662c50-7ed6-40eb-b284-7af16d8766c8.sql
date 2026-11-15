@@ -1,0 +1,10 @@
+ALTER TABLE public.sync_requests ADD COLUMN sender_email text NOT NULL DEFAULT '', ADD COLUMN email_updates boolean NOT NULL DEFAULT true;
+ALTER TABLE public.sync_requests ADD CONSTRAINT sync_sender_email_length CHECK (length(sender_email) <= 254);
+CREATE TABLE public.email_notifications (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE, event_key text NOT NULL UNIQUE, event_type text NOT NULL, status text NOT NULL DEFAULT 'PENDING' CHECK(status IN ('PENDING','SENT','FAILED')), provider_id text, error text, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT, INSERT, UPDATE ON public.email_notifications TO authenticated;
+GRANT ALL ON public.email_notifications TO service_role;
+ALTER TABLE public.email_notifications ENABLE ROW LEVEL SECURITY;
+CREATE POLICY email_owner_read ON public.email_notifications FOR SELECT TO authenticated USING(user_id = (SELECT auth.uid()));
+CREATE POLICY email_owner_create ON public.email_notifications FOR INSERT TO authenticated WITH CHECK(user_id = (SELECT auth.uid()));
+CREATE POLICY email_owner_update ON public.email_notifications FOR UPDATE TO authenticated USING(user_id = (SELECT auth.uid())) WITH CHECK(user_id = (SELECT auth.uid()));
+CREATE TRIGGER emails_updated BEFORE UPDATE ON public.email_notifications FOR EACH ROW EXECUTE FUNCTION public.touch_updated_at();
